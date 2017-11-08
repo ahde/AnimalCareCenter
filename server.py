@@ -17,7 +17,7 @@ Read about it online.
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response, url_for,g
+from flask import Flask, request, render_template, g, redirect, Response, url_for,g, flash
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -170,27 +170,39 @@ def another():
 
 
 # Example of adding new data to the database
-@app.route('/add', methods=['GET','POST'])
-def add():
+@app.route('/addCustomer', methods=['GET','POST'])
+def addCustomer():
   error = None
-  firstname = request.form['firstname']
-  lastname = request.form['lastname']
-  phone = request.form['phone']
-  email = request.form['email']
-  street = request.form['street']
-  city = request.form['city']
-  country = request.form['country']
-  zipcode = request.form['zipcode']
-  cursor = g.conn.execute("SELECT customerid FROM customer where phone=%s",phone)
-  phone = []
-  for result in cursor:
-      phone.append(result)  # can also be accessed using result[0]
-  cursor.close()
-  if phone:
-    error = "Phone number already taken"
-   # return render_template('index.html', error=error)
-  g.conn.execute("INSERT INTO customer(firstname, lastname, phone, email, street, city, country, zipcode) VALUES(%s, %s, %s, %s,%s,%s,%s,%s)", (firstname,lastname,phone,email,street,city,country,zipcode))
-  return redirect('/')
+  if request.method == 'POST':
+    firstname = request.form['firstname']
+    if(firstname == ''):
+      error = "Please enter first name"
+      return render_template('addCustomer.html', error=error)
+    lastname = request.form['lastname']
+    phone = request.form['phone']
+    if(phone == ''):
+      error = " Please enter phone"
+      return render_template('addCustomer.html', error=error)
+    email = request.form['email']
+    if(email == ''):
+      error = "Please enter email"
+      return render_template('addCustomer.html', error=error)
+    street = request.form['street']
+    city = request.form['city']
+    state = request.form['state']
+    country = request.form['country']
+    zipcode = request.form['zipcode']
+    cursor = g.conn.execute("SELECT customerid FROM customer where phone=%s",phone)
+    phoneExists = []
+    for result in cursor:
+        phoneExists.append(result)  # can also be accessed using result[0]
+    cursor.close()
+    if phoneExists:
+      error = "Phone number already taken"
+      return render_template('addCustomer.html', error=error)
+    g.conn.execute("INSERT INTO customer(firstname, lastname, phone, email, street, city, state, country, zipcode) VALUES(%s, %s, %s, %s,%s,%s,%s,%s, %s)", (firstname,lastname,phone,email,street,city,state, country,zipcode))
+    return redirect('/')
+  return render_template('addCustomer.html')
 
 @app.route('/pets', methods=['GET', 'POST'])
 def pets():

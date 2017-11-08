@@ -1,0 +1,37 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Add Customer</h1>
+
+ 
+<p><a href="/">Back to HomePage</a></p>
+
+
+<form method="POST" action="/addCustomer">
+  First Names: <input type="text" name="firstname"> </br>
+  Last Name: <input type="text" name="lastname"> </br>
+  Phone: <input type="text" name="phone"> </br>
+  Email: <input type="text" name="email"> </br>
+  Street: <input type="text" name="street"></br>
+  City: <input type="text" name="city"></br>
+  State: <input type="text" name="state"></br>
+  Country: <input type="text" name="country"></br>
+  ZipCode: <input type="text" name="zipcode"></br>
+  
+ <input type="submit" value="Add"></p>
+</form>
+ {% if error %}
+         <p class="error"><strong>Error:</strong>{{error}}
+      {% endif %}
+</body>
+
+
+</html>
+
