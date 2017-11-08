@@ -31,22 +31,22 @@
 
 
  <h2>Make an Appointment for Pet</h2>
-  Pet ID: <input type="text" name="petID"> </br>
- 
+  
+<form method="POST" action="/appointments">
 Select Appointment Month:
   <select name="moa">
-    <option value="jan" name="moa">January</option>
-    <option value="feb" name="moa">February</option>
-    <option value="march" name="moa">March</option>
-    <option value="april" name="moa">April</option>
-    <option value="may" name="moa">May</option>
-    <option value="june" name="moa">June</option>
-    <option value="july" name="moa">July</option>
-    <option value="august" name="moa">August</option>
-    <option value="september" name="moa">September</option>
-    <option value="october" name="moa">October</option>
-    <option value="november" name="moa">November</option>
-    <option value="december" name="moa">December</option>
+    <option value="1" name="moa">January</option>
+    <option value="2" name="moa">February</option>
+    <option value="3" name="moa">March</option>
+    <option value="4" name="moa">April</option>
+    <option value="5" name="moa">May</option>
+    <option value="6" name="moa">June</option>
+    <option value="7" name="moa">July</option>
+    <option value="8" name="moa">August</option>
+    <option value="9" name="moa">September</option>
+    <option value="10" name="moa">October</option>
+    <option value="11" name="moa">November</option>
+    <option value="12" name="moa">December</option>
     </select>
     <br>
 Select Appointment Day:
@@ -86,49 +86,40 @@ Select Appointment Day:
 <br>
 Appointment Year: <input type="text" name="yoa"> </br>
 
-Select Appointment Hour:
+Select Appointment Hour( 7AM - 6PM):
 <select name="hoa">
-<option value="1am" name="hoa">1AM</option>
-<option value="2am" name="hoa">2AM</option>
-<option value="3am" name="hoa">3AM</option>
-<option value="4am" name="hoa">4AM</option>
-<option value="5am" name="hoa">5AM</option>
-<option value="6am" name="hoa">6AM</option>
-<option value="7am" name="hoa">7AM</option>
-<option value="8am" name="hoa">8AM</option>
-<option value="9am" name="hoa">9AM</option>
-<option value="10am" name="hoa">10AM</option>
-<option value="11am" name="hoa">11AM</option>
-<option value="12pm" name="hoa">12PM</option>
-<option value="13pm" name="hoa">13PM</option>
-<option value="14pm" name="hoa">14PM</option>
-<option value="15pm" name="hoa">15PM</option>
-<option value="16pm" name="hoa">16PM</option>
-<option value="17pm" name="hoa">17PM</option>
-<option value="18pm" name="hoa">18PM</option>
-<option value="19pm" name="hoa">19PM</option>
-<option value="20pm" name="hoa">20PM</option>
-<option value="21pm" name="hoa">21PM</option>
-<option value="22pm" name="hoa">22PM</option>
-<option value="23pm" name="hob">23PM</option>
-<option value="24pm" name="hoa">24PM</option>
+<option value="7" name="hoa">7AM</option>
+<option value="8" name="hoa">8AM</option>
+<option value="9" name="hoa">9AM</option>
+<option value="10" name="hoa">10AM</option>
+<option value="11" name="hoa">11AM</option>
+<option value="12" name="hoa">12PM</option>
+<option value="13" name="hoa">13PM</option>
+<option value="14" name="hoa">14PM</option>
+<option value="15" name="hoa">15PM</option>
+<option value="16" name="hoa">16PM</option>
+<option value="17" name="hoa">17PM</option>
+<option value="18" name="hoa">18PM</option>
 </select>
-
+</br>
+Physician Name:
   <select name="Physician">
     {% for item in physicians %}
       <option  value="{{ item.physicianid }}">{{ item.firstname }}</option>
    {% endfor %}
    </select>
-
+</br>
+Nurse Name:
    <select name="Nurse">
     {% for item in nurses %}
-      <option  value="{{ item }}">{{ item }}</option>
+      <option  value="{{ item.nurseid }}">{{ item.firstname }}</option>
    {% endfor %}
    </select>
 
 <br>
+<input type="hidden" name="petid" value="{{request.args.get('id') }}"></input>
 <input type="submit" value="Add"></p>
-
+<a href="/">Back</a>
 
 </form>
 

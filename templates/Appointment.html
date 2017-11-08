@@ -14,7 +14,7 @@
 
              <select name="Nurse">
               {% for item in nurses %}
-                <option  value="{{ item }}">{{ item }}</option>
+                <option  value="{{ item.nurseid }}">{{  item.firstname }}</option>
              {% endfor %}
              </select>
              

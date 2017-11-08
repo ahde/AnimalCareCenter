@@ -18,6 +18,7 @@ import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, url_for,g, flash
+import datetime
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -224,20 +225,47 @@ def pets():
     petyob = request.form['yob']
     petcustomerid = request.form['customerid']
     g.conn.execute("INSERT INTO Pet(customerid, petname, pettype, dob, mob, yob) VALUES(%s, %s, %s, %s,%s,%s)", (petcustomerid,petname,pettype,petdob,petmob,petyob))
-    return redirect('/pets?id=1&error=Pet already added')
-   # return redirect('/pets')
+    return redirect('/pets?id=',petcustomerid)
+   # return redirect('/')
 
 @app.route('/appointments', methods=['GET', 'POST'])
 def appointments():
   if request.method == 'GET':
-    petid = request.args.get('id')
-    appt = []
-    if(petid):
-      cursor = g.conn.execute('select firstname, lastname, appointmentdate from appointment a inner join physician p on a.physicianid = p.physicianid inner join employee e on p.employeeid = e.employeeid  where a.petid = 2')
+     physicians = []
+     cursor = g.conn.execute('select physicianid, firstname from physician p inner join employee e on p.employeeid = e.employeeid')
+     for result in cursor:
+        physicians.append(result)  # can also be accessed using result[0]
+     cursor.close()
+     nurses = []
+     cursor = g.conn.execute('select nurseid, firstname from nurse n inner join employee e on n.employeeid = e.employeeid')
+     for result in cursor:
+        nurses.append(result)  # can also be accessed using result[0]
+     cursor.close()
+     petid = request.args.get('id')
+     appt = []
+     if(petid):
+      cursor = g.conn.execute('select firstname, lastname, appointmentdate from appointment a inner join physician p on a.physicianid = p.physicianid inner join employee e on p.employeeid = e.employeeid  where a.petid =%s', petid)
       for result in cursor:
           appt.append(result)
       cursor.close()
-    context = dict(data = appt)
+      context = {'physicians': physicians, 'nurses':nurses, 'data': appt}
+  else:
+    physicianid = request.form['Physician']
+    nurseid = request.form['Nurse']
+    day = request.form['moa']
+    month = request.form['doa']
+    year = request.form['yoa']
+    hour = request.form['hoa']
+    t = datetime.time(int(hour),0,0)
+    d = datetime.datetime(year=int(year), month=int(month), day=int(day))
+    dt = datetime.datetime.combine(d, t)
+    petid = request.form['petid']
+    cursor = g.conn.execute('insert into appointment(petid, physicianid, nurseid, appointmentdate) values(%s, %s, %s, %s)', petid, physicianid, nurseid, dt)
+    r = '/appointments?id='
+    r = r + petid
+    return redirect(r)
+   # context = dict(data = appt)
+
   return render_template("appt.html", **context)
     #  physicians = []
      # for result in cursor:
