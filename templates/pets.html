@@ -29,12 +29,14 @@
          <td>{{n.dob}}</td>
          <td>{{n.mob}}</td>
          <td>{{n.yob}}</td>
-         <td><a href="" >View/Add Appointment</a></td>
+         <td><a href="{{ '/appointments?id='+n.petid|string }}">View/Add Appointment</a></td>
          <td><a href="" >Add Boarding</a></td>
     </tr>
     {% endfor %}
    </table>
   </div>
+
+<a href="\">Back</a>
 
 <p>Add Pet</p>
 

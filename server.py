@@ -230,22 +230,28 @@ def pets():
 @app.route('/appointments', methods=['GET', 'POST'])
 def appointments():
   if request.method == 'GET':
-   # customerid = request.args.get('id')
-    #if(customerid):
-      cursor = g.conn.execute("SELECT physicianid, firstname, lastname FROM physician p inner join employee e on p.employeeid = e.employeeid")
-      physicians = []
+    petid = request.args.get('id')
+    appt = []
+    if(petid):
+      cursor = g.conn.execute('select firstname, lastname, appointmentdate from appointment a inner join physician p on a.physicianid = p.physicianid inner join employee e on p.employeeid = e.employeeid  where a.petid = 2')
       for result in cursor:
-         physicians.append(result)  # can also be accessed using result[0]
+          appt.append(result)
       cursor.close()
-      nurses = []
-      nurses.append('nurse1')
-      nurses.append('nurse2')
-      nurses.append('nurse3')
+    context = dict(data = appt)
+  return render_template("appt.html", **context)
+    #  physicians = []
+     # for result in cursor:
+      #   physicians.append(result)  # can also be accessed using result[0]
+   #   cursor.close()
+      #nurses = []
+      #nurses.append('nurse1')
+      #nurses.append('nurse2')
+      #nurses.append('nurse3')
       #cursor.close()
     #  context = dict(data = appointments)
       #context = dict(nurse = nurses)
-      context = {'physicians': physicians, 'nurses':nurses}
-      return render_template("appointment.html", **context)
+      #context = {'physicians': physicians, 'nurses':nurses}
+    
   
   
 

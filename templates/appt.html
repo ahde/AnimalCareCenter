@@ -1,0 +1,140 @@
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Appointment Information</h1>
+
+  <div>
+    <table border="1">
+       <tr>
+        <td><b>Physician Name</b></td>
+        <td><b>Appointment Date</b></td>
+       </tr>
+      
+    {% for n in data %}
+     <tr>
+        
+         <td>{{n.firstname}} {{n.lastname}}</td>
+         <td>{{n.appointmentdate}}</td>
+             
+    </tr>
+    {% endfor %}
+   </table>
+  </div>
+
+
+ <h2>Make an Appointment for Pet</h2>
+  Pet ID: <input type="text" name="petID"> </br>
+ 
+Select Appointment Month:
+  <select name="moa">
+    <option value="jan" name="moa">January</option>
+    <option value="feb" name="moa">February</option>
+    <option value="march" name="moa">March</option>
+    <option value="april" name="moa">April</option>
+    <option value="may" name="moa">May</option>
+    <option value="june" name="moa">June</option>
+    <option value="july" name="moa">July</option>
+    <option value="august" name="moa">August</option>
+    <option value="september" name="moa">September</option>
+    <option value="october" name="moa">October</option>
+    <option value="november" name="moa">November</option>
+    <option value="december" name="moa">December</option>
+    </select>
+    <br>
+Select Appointment Day:
+<select name="doa">
+<option value="1" name="doa">1</option>
+<option value="2" name="doa">2</option>
+<option value="3" name="doa">3</option>
+<option value="4" name="doa">4</option>
+<option value="5" name="doa">5</option>
+<option value="6" name="doa">6</option>
+<option value="7" name="doa">7</option>
+<option value="8" name="doa">8</option>
+<option value="9" name="doa">9</option>
+<option value="10" name="doa">10</option>
+<option value="11" name="doa">11</option>
+<option value="12" name="doa">12</option>
+<option value="13" name="doa">13</option>
+<option value="14" name="doa">14</option>
+<option value="15" name="doa">15</option>
+<option value="16" name="doa">16</option>
+<option value="17" name="doa">17</option>
+<option value="18" name="doa">18</option>
+<option value="19" name="doa">19</option>
+<option value="20" name="doa">20</option>
+<option value="21" name="doa">21</option>
+<option value="22" name="doa">22</option>
+<option value="23" name="dob">23</option>
+<option value="24" name="doa">24</option>
+<option value="25" name="doa">25</option>
+<option value="26" name="doa">26</option>
+<option value="27" name="doa">27</option>
+<option value="28" name="doa">28</option>
+<option value="29" name="doa">29</option>
+<option value="30" name="doa">30</option>
+<option value="31" name="doa">31</option>
+</select>
+<br>
+Appointment Year: <input type="text" name="yoa"> </br>
+
+Select Appointment Hour:
+<select name="hoa">
+<option value="1am" name="hoa">1AM</option>
+<option value="2am" name="hoa">2AM</option>
+<option value="3am" name="hoa">3AM</option>
+<option value="4am" name="hoa">4AM</option>
+<option value="5am" name="hoa">5AM</option>
+<option value="6am" name="hoa">6AM</option>
+<option value="7am" name="hoa">7AM</option>
+<option value="8am" name="hoa">8AM</option>
+<option value="9am" name="hoa">9AM</option>
+<option value="10am" name="hoa">10AM</option>
+<option value="11am" name="hoa">11AM</option>
+<option value="12pm" name="hoa">12PM</option>
+<option value="13pm" name="hoa">13PM</option>
+<option value="14pm" name="hoa">14PM</option>
+<option value="15pm" name="hoa">15PM</option>
+<option value="16pm" name="hoa">16PM</option>
+<option value="17pm" name="hoa">17PM</option>
+<option value="18pm" name="hoa">18PM</option>
+<option value="19pm" name="hoa">19PM</option>
+<option value="20pm" name="hoa">20PM</option>
+<option value="21pm" name="hoa">21PM</option>
+<option value="22pm" name="hoa">22PM</option>
+<option value="23pm" name="hob">23PM</option>
+<option value="24pm" name="hoa">24PM</option>
+</select>
+
+  <select name="Physician">
+    {% for item in physicians %}
+      <option  value="{{ item.physicianid }}">{{ item.firstname }}</option>
+   {% endfor %}
+   </select>
+
+   <select name="Nurse">
+    {% for item in nurses %}
+      <option  value="{{ item }}">{{ item }}</option>
+   {% endfor %}
+   </select>
+
+<br>
+<input type="submit" value="Add"></p>
+
+
+</form>
+
+
+
+</body>
+
+</html>
+
