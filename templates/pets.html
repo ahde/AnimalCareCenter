@@ -1,0 +1,64 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Welcome To Pet Management</h1>
+  
+  <div>
+    <table border="1">
+       <tr>
+        <td><b>PetID</b></td>
+        <td><b>Pet Name</b></td>
+        <td><b>Pet Type</b></td>
+        <td><b>dob</b></td>
+        <td><b>mob</b></td>
+        <td><b>yob</b></td>
+       </tr>
+      
+    {% for n in data %}
+     <tr>
+     	 <td>{{n.petid}}</td>  
+         <td>{{n.petname}}</td>
+         <td>{{n.pettype}}</td>
+         <td>{{n.dob}}</td>
+         <td>{{n.mob}}</td>
+         <td>{{n.yob}}</td>
+         <td><a href="" >View/Add Appointment</a></td>
+         <td><a href="" >Add Boarding</a></td>
+    </tr>
+    {% endfor %}
+   </table>
+  </div>
+
+<p>Add Pet</p>
+
+<form method="POST" action="/pets">
+  Pet Name: <input type="text" name="petname"> </br>
+  Pet Type: <select name="pettype">
+    <option name="Dog" id="1" value="Dog">Dog</option>
+    <option name="Cat" id="2" value="Cat">Cat</option>
+    <option name="Horse" id="3" value="Horse">Horse</option>
+    <option name="Bunny" id="4" value="Bunny">Bunny</option>
+    <option name="Bird" id="5" value="Bird">Bird</option>
+    </select>
+    </br>
+    DOB: <input type="text" name="dob" maxlength="2"><br>
+    MOB: <input type="text" name="mob" maxlength="2"><br>
+    YOB: <input type="text" name="yob" maxlength="4"><br>
+   <input type="hidden" name="customerid" value="{{request.args.get('id') }}"></input>
+  <!--  <input type="hidden" name="customerid" value="3"></input>-->
+     
+ <input type="submit" value="AddPet" title="Add Pet"></p>
+</form>
+ {% if error %}
+         <p class="error"><strong>Error:</strong>{{error}}
+      {% endif %}
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Welcome Admin</h1>
+
+  <div>
+    <table border="1">
+       <tr>
+        <td><b>CustomerID</b></td>
+        <td><b>First Name</b></td>
+        <td><b>Last Name</b></td>
+        <td><b>Phone</b></td>
+        <td><b>Email</b></td>
+        <td><b>Street</b></td>
+        <td><b>City</b></td>
+        <td><b>State</b></td>
+        <td><b>Country</b></td>
+        <td><b>ZipCode</b></td>
+        <td><b>View/Add Pets</b></td>
+      </tr>
+      
+    {% for n in data %}
+     <tr>
+         <td>{{n.customerid}}</td>  
+         <td>{{n.firstname}}</td>
+         <td>{{n.lastname}}</td>
+         <td>{{n.phone}}</td>
+         <td>{{n.email}}</td>
+         <td>{{n.street}}</td>
+         <td>{{n.city}}</td>
+         <td>{{n.state}}</td>
+         <td>{{n.country}}</td>
+         <td>{{n.zipcode}}</td>
+          <td><a href="{{ '/pets?id='+n.customerid|string }}">{{n.customerid}}</a></td>
+    </tr>
+    {% endfor %}
+   </table>
+  </div>
+
+<p>Add Customer</p>
+<p><a href="/appointments">Add Appointment</a></p>
+
+<form method="POST" action="/add">
+  First Name: <input type="text" name="firstname"> </br>
+  Last Name: <input type="text" name="lastname"> </br>
+  Phone: <input type="text" name="phone"> </br>
+  Email: <input type="text" name="email"> </br>
+  Street: <input type="text" name="street"></br>
+  City: <input type="text" name="city"></br>
+  State: <input type="text" name="state"></br>
+  Country: <input type="text" name="country"></br>
+  ZipCode: <input type="text" name="zipcode"></br>
+  
+ <input type="submit" value="Add"></p>
+</form>
+ {% if error %}
+         <p class="error"><strong>Error:</strong>{{error}}
+      {% endif %}
+</body>
+
+
+</html>

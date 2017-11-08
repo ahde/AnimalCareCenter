@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Unit 2 Rot 13</title>
+  </head>
+
+  <body>
+    <h2>Enter some text to ROT13:</h2>
+    <form method="post">
+             <select name="Physician">
+              {% for item in physicians %}
+                <option  value="{{ item.physicianid }}">{{ item.firstname }}</option>
+             {% endfor %}
+             </select>
+
+             <select name="Nurse">
+              {% for item in nurses %}
+                <option  value="{{ item }}">{{ item }}</option>
+             {% endfor %}
+             </select>
+             
+ 
+      <br>
+      <input type="submit">
+
+    </form>
+  </body>
+
+</html>
