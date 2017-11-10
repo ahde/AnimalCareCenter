@@ -1,0 +1,153 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Welcome To Pet Boarding</h1>
+  
+  <div>
+    <table border="1">
+       <tr>
+        <td><b>Boarding Type</b></td>
+        <td><b>Start Time</b></td>
+        <td><b>End Time</b></td>
+        <td><b>Employee Name</b></td>
+       </tr>
+      
+    {% for n in data %}
+     <tr>
+     	 <td>{{n.boardingtype}}</td>  
+         <td>{{n.starttime}}</td>
+         <td>{{n.endtime}}</td>
+         <td>{{n.firstname}} {{n.lastname}}</td>
+       </tr>
+    {% endfor %}
+   </table>
+  </div>
+
+<a href="\">Back</a>
+
+<p>Add Pet</p>
+
+<form method="POST" action="/pets">
+  Boarding Year: <input type="text" name="yoa"> </br>
+  Select Boarding Month:
+  <select name="moa">
+    <option value="1" name="moa">January</option>
+    <option value="2" name="moa">February</option>
+    <option value="3" name="moa">March</option>
+    <option value="4" name="moa">April</option>
+    <option value="5" name="moa">May</option>
+    <option value="6" name="moa">June</option>
+    <option value="7" name="moa">July</option>
+    <option value="8" name="moa">August</option>
+    <option value="9" name="moa">September</option>
+    <option value="10" name="moa">October</option>
+    <option value="11" name="moa">November</option>
+    <option value="12" name="moa">December</option>
+    </select>
+    <br>
+  Select Boarding Day:
+<select name="doa">
+<option value="1" name="doa">1</option>
+<option value="2" name="doa">2</option>
+<option value="3" name="doa">3</option>
+<option value="4" name="doa">4</option>
+<option value="5" name="doa">5</option>
+<option value="6" name="doa">6</option>
+<option value="7" name="doa">7</option>
+<option value="8" name="doa">8</option>
+<option value="9" name="doa">9</option>
+<option value="10" name="doa">10</option>
+<option value="11" name="doa">11</option>
+<option value="12" name="doa">12</option>
+<option value="13" name="doa">13</option>
+<option value="14" name="doa">14</option>
+<option value="15" name="doa">15</option>
+<option value="16" name="doa">16</option>
+<option value="17" name="doa">17</option>
+<option value="18" name="doa">18</option>
+<option value="19" name="doa">19</option>
+<option value="20" name="doa">20</option>
+<option value="21" name="doa">21</option>
+<option value="22" name="doa">22</option>
+<option value="23" name="dob">23</option>
+<option value="24" name="doa">24</option>
+<option value="25" name="doa">25</option>
+<option value="26" name="doa">26</option>
+<option value="27" name="doa">27</option>
+<option value="28" name="doa">28</option>
+<option value="29" name="doa">29</option>
+<option value="30" name="doa">30</option>
+<option value="31" name="doa">31</option>
+</select>
+</br>
+
+Select Boarding Start Hour( 7AM - 6PM):
+<select name="hoas">
+<option value="7" name="hoas">7AM</option>
+<option value="8" name="hoas">8AM</option>
+<option value="9" name="hoas">9AM</option>
+<option value="10" name="hoas">10AM</option>
+<option value="11" name="hoas">11AM</option>
+<option value="12" name="hoas">12PM</option>
+<option value="13" name="hoas">13PM</option>
+<option value="14" name="hoas">14PM</option>
+<option value="15" name="hoas">15PM</option>
+<option value="16" name="hoas">16PM</option>
+<option value="17" name="hoas">17PM</option>
+<option value="18" name="hoas">18PM</option>
+</select>
+</br>
+
+Select Boarding End Hour( 7AM - 6PM):
+<select name="hoae">
+<option value="7" name="hoae">7AM</option>
+<option value="8" name="hoae">8AM</option>
+<option value="9" name="hoae">9AM</option>
+<option value="10" name="hoae">10AM</option>
+<option value="11" name="hoae">11AM</option>
+<option value="12" name="hoae">12PM</option>
+<option value="13" name="hoae">13PM</option>
+<option value="14" name="hoae">14PM</option>
+<option value="15" name="hoae">15PM</option>
+<option value="16" name="hoae">16PM</option>
+<option value="17" name="hoae">17PM</option>
+<option value="18" name="hoae">18PM</option>
+</select>
+</br>
+
+Boarding Type:
+  <select name="BoardingType">
+    {% for item in boardingType %}
+      <option  value="{{ item.employeeid }}">{{ item.firstname }} {{item.lastname}}</option>
+   {% endfor %}
+   </select>
+</br>
+
+Employee/Staff Name:
+  <select name="Staff">
+    {% for item in staff %}
+      <option  value="{{ item.employeeid }}">{{ item.firstname }} {{item.lastname}}</option>
+   {% endfor %}
+   </select>
+</br>
+
+<br>
+
+<input type="hidden" name="customerid" value="{{request.args.get('id') }}"></input>
+  
+     
+ <input type="submit" value="AddPet" title="Add Boarding"></p>
+</form>
+ {% if error %}
+         <p class="error"><strong>Error:</strong>{{error}}
+      {% endif %}
+</body>
+
+</html>

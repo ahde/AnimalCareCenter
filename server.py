@@ -264,24 +264,50 @@ def appointments():
     r = '/appointments?id='
     r = r + petid
     return redirect(r)
-   # context = dict(data = appt)
-
+  
   return render_template("appt.html", **context)
-    #  physicians = []
-     # for result in cursor:
-      #   physicians.append(result)  # can also be accessed using result[0]
-   #   cursor.close()
-      #nurses = []
-      #nurses.append('nurse1')
-      #nurses.append('nurse2')
-      #nurses.append('nurse3')
-      #cursor.close()
-    #  context = dict(data = appointments)
-      #context = dict(nurse = nurses)
-      #context = {'physicians': physicians, 'nurses':nurses}
+
+  @app.route('/boarding', methods=['GET', 'POST'])
+  def boarding():
+   if request.method == 'GET':
+     staff = []
+     cursor = g.conn.execute('select employeeid, firstname, lastname from employee where employeetype= boardingstaff')
+     for result in cursor:
+        staff.append(result)  # can also be accessed using result[0]
+     cursor.close()
+     boardingtype = []
+     cursor = g.conn.execute('select employeeid, firstname, lastname from employee where employeetype= boardingstaff')
+     for result in cursor:
+        boardingtype.append(result)  # can also be accessed using result[0]
+     cursor.close()
+     petid = request.args.get('id')
+     boarding = []
+     if(petid):
+      cursor = g.conn.execute('select firstname, lastname, starttime, endtime from boarding b inner join employee e on b.employeeid = e.employeeid where a.petid =%s', petid)
+      for result in cursor:
+          boarding.append(result)
+      cursor.close()
+      context = {'data': boarding, 'staff':staff, 'boardingtype':boardingtype}
+   else:
+    employeeid = request.form['Staff']
+    day = request.form['moa']
+    month = request.form['doa']
+    year = request.form['yoa']
+    starthour = request.form['hoas']
+    endhour = request.form['hoae']
+    starthour = datetime.time(int(starthour),0,0)
+    endhour = datetime.time(int(endhour),0,0)
+    d = datetime.datetime(year=int(year), month=int(month), day=int(day))
+    startdt = datetime.datetime.combine(d, starthour)
+    enddt = datetime.datetime.combine(d, endhour)
+    petid = request.form['petid']
+    cursor = g.conn.execute('insert into boarding(petid, starttime, endtime, boardingtype, employeeid) values(%s, %s, %s, %s, %s)', petid, startdt, enddt, boardingtype, employeeid)
+    r = '/boarding?id='
+    r = r + petid
+    return redirect(r)
+  
+  return render_template("appt.html", **context)
     
-  
-  
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
