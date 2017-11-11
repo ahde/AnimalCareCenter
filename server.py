@@ -20,6 +20,7 @@ from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, url_for,g, flash
 import datetime
 
+
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
 
@@ -176,18 +177,15 @@ def addCustomer():
   error = None
   if request.method == 'POST':
     firstname = request.form['firstname']
-    if(firstname == ''):
-      error = "Please enter first name"
-      return render_template('addCustomer.html', error=error)
     lastname = request.form['lastname']
     phone = request.form['phone']
     if(phone == ''):
       error = " Please enter phone"
       return render_template('addCustomer.html', error=error)
-    email = request.form['email']
-    if(email == ''):
-      error = "Please enter email"
+    if(phone != '' and not phone.isdigit()):
+      error = " Please enter a numeric phone"
       return render_template('addCustomer.html', error=error)
+    email = request.form['email']
     street = request.form['street']
     city = request.form['city']
     state = request.form['state']
@@ -309,10 +307,11 @@ def appointments():
   return render_template("appt.html", **context)
     
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   error = None
-  if request.method == 'POST':
+  if request.method == 'POST': 
     if(request.form['username'] != 'admin' or request.form['password'] != 'password'):
       error = 'Invalid Credentials'
     else:
@@ -342,6 +341,7 @@ if __name__ == "__main__":
 
     HOST, PORT = host, port
     print("running on %s:%d" % (HOST, PORT))
+    app.debug = True
     app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
 
 

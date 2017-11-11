@@ -1,12 +1,40 @@
 <html>
+ <head>
   <style>
     body{ 
       font-size: 15pt;
       font-family: arial;
     }
   </style>
-
-
+  <script>
+      function validate()
+      {
+        var phone = document.forms["addCustomer"]["phone"].value;
+        var zipcode  = document.forms["addCustomer"]["zipcode"].value;
+        var email  = document.forms["addCustomer"]["email"].value;
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var error = "";
+        if(phone  == "")
+          error = "***Please enter value for Phone***";
+        if(phone !="" && isNaN(phone))
+          error =error   +  "***Please enter numeric value for Phone***";
+        if(phone != "" && phone.length != 10)
+           error =error   +  "***Phone number should be 10 digits***";
+        if(email != "" &&  !re.test(email))
+          error  = error  + "***Please enter a valid email format***";
+        if(zipcode  != "" && isNaN(zipcode))
+           error = error + "***Please enter a numeric value for ZipCode***";
+         if(zipcode != "" && zipcode.length != 5)
+           error =error   +  "***ZipCode should be 5 digits ***"; 
+        if(error  != ""){
+           var w = window.open("","Please input a value","width=200, height=100, top=300, left=300");
+           w.document.write(error );
+           return false;
+         }
+        return true;
+      }
+    </script>
+</head>
 <body>
   <h1>Add Customer</h1>
 
@@ -14,18 +42,21 @@
 <p><a href="/">Back to HomePage</a></p>
 
 
-<form method="POST" action="/addCustomer">
-  First Names: <input type="text" name="firstname"> </br>
-  Last Name: <input type="text" name="lastname"> </br>
-  Phone: <input type="text" name="phone"> </br>
-  Email: <input type="text" name="email"> </br>
-  Street: <input type="text" name="street"></br>
-  City: <input type="text" name="city"></br>
-  State: <input type="text" name="state"></br>
-  Country: <input type="text" name="country"></br>
-  ZipCode: <input type="text" name="zipcode"></br>
+<form method="POST" action="/addCustomer" name="addCustomer">
+  <table> 
+
+  <tr><td>First Names </td><td><input type="text" name="firstname"> </td></tr>
+ <tr><td> Last Name </td><td><input type="text" name="lastname" > </td></tr>
+  <tr><td>Phone<span style="color:red">*</span></span></td><td> <input type="text" name="phone"> </td></tr>
+  <tr><td>Email</td><td> <input type="text" name="email"> </td></tr>
+  <tr><td>Street</td><td> <input type="text" name="street"></td></tr>
+  <tr><td>City</td><td> <input type="text" name="city"></td></tr>
+  <tr><td>State </td><td><input type="text" name="state"></td></tr>
+  <tr><td>Country</td><td> <input type="text" name="country" text="USA"></td></tr>
+  <tr><td>ZipCode</td><td> <input type="text" name="zipcode"></td></tr>
   
- <input type="submit" value="Add"></p>
+ </table>
+ <input type="submit" value="Add" width="600px" onclick="return validate();">
 </form>
  {% if error %}
          <p class="error"><strong>Error:</strong>{{error}}
