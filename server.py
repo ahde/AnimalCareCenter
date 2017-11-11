@@ -19,6 +19,7 @@ from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, url_for,g, flash
 import datetime
+from sqlalchemy import exc
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -191,15 +192,16 @@ def addCustomer():
     state = request.form['state']
     country = request.form['country']
     zipcode = request.form['zipcode']
-    cursor = g.conn.execute("SELECT customerid FROM customer where phone=%s",phone)
-    phoneExists = []
-    for result in cursor:
-        phoneExists.append(result)  # can also be accessed using result[0]
-    cursor.close()
-    if phoneExists:
-      error = "Phone number already taken"
-      return render_template('addCustomer.html', error=error)
-    g.conn.execute("INSERT INTO customer(firstname, lastname, phone, email, street, city, state, country, zipcode) VALUES(%s, %s, %s, %s,%s,%s,%s,%s, %s)", (firstname,lastname,phone,email,street,city,state, country,zipcode))
+    try:
+       g.conn.execute("INSERT INTO customer(firstname, lastname, phone, email, street, city, state, country, zipcode) VALUES(%s, %s, %s, %s,%s,%s,%s,%s, %s)", (firstname,lastname,phone,email,street,city,state, country,zipcode))
+    except Exception as e:
+      if("customer_phone_key" in e.orig.args[0]):
+        return render_template('addCustomer.html', error="Phone number already taken")
+    else:
+      pass
+    finally:
+      pass
+   
     return redirect('/')
   return render_template('addCustomer.html')
 
