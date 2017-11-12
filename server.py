@@ -20,6 +20,7 @@ from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, url_for,g, flash
 import datetime
 from sqlalchemy import exc
+import psycopg2
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -195,10 +196,10 @@ def addCustomer():
     try:
        g.conn.execute("INSERT INTO customer(firstname, lastname, phone, email, street, city, state, country, zipcode) VALUES(%s, %s, %s, %s,%s,%s,%s,%s, %s)", (firstname,lastname,phone,email,street,city,state, country,zipcode))
     except Exception as e:
-      if("customer_phone_key" in e.orig.args[0]):
-        return render_template('addCustomer.html', error="Phone number already taken")
-    else:
-      pass
+       if("customer_phone_key" in e.orig.args[0]):
+          return render_template('addCustomer.html', error="Phone number already taken")
+       else:
+        pass
     finally:
       pass
    
@@ -301,9 +302,13 @@ def boarding():
     startdt = datetime.datetime.combine(d, starthour)
     enddt = datetime.datetime.combine(d, endhour)
     petid = request.form['petid']
-    boarding = request.form['BoardingType']
-    #boardingtype = 'Premium'
-    cursor = g.conn.execute('insert into petboarding(petid, starttime, endtime, boardingtype, employeeid) values(%s, %s, %s, %s, %s)', petid, startdt, enddt, boardingtype, employeeid)
+    boardingtype = request.form['BoardingType']
+    try:
+     cursor = g.conn.execute('insert into petboarding(petid, starttime, endtime, boardingtype, employeeid) values(%s, %s, %s, %s, %s)', petid, startdt, enddt, boardingtype, employeeid)
+    except Exception as e:
+       return redirect(url_for('boarding', id=petid, error="Appointment already taken"))
+    finally:
+      pass
     r = '/boarding?id='
     r = r + petid
     return redirect(r)
