@@ -30,13 +30,17 @@
    </table>
   </div>
 
-<a href="\">Back</a>
+<br/><br/>
 
-<p>Add Pet</p>
-
-<form method="POST" action="/pets">
-  Boarding Year: <input type="text" name="yoa"> </br>
-  Select Boarding Month:
+<form method="POST" action="/boarding">
+  <table>
+     <tr>
+  <td>Boarding Year</td><td>  <select name="yoa">
+    <option value="2017" name="yoa">2017</option>
+    <option value="2018" name="yoa">2018</option>
+    </select></td></tr>
+  <tr><td>
+  Select Boarding Month</td><td>
   <select name="moa">
     <option value="1" name="moa">January</option>
     <option value="2" name="moa">February</option>
@@ -50,9 +54,9 @@
     <option value="10" name="moa">October</option>
     <option value="11" name="moa">November</option>
     <option value="12" name="moa">December</option>
-    </select>
-    <br>
-  Select Boarding Day:
+    </select></td></tr>
+    <tr><td>
+  Select Boarding Day</td><td>
 <select name="doa">
 <option value="1" name="doa">1</option>
 <option value="2" name="doa">2</option>
@@ -86,9 +90,11 @@
 <option value="30" name="doa">30</option>
 <option value="31" name="doa">31</option>
 </select>
-</br>
+</td></tr>
+<tr>
 
-Select Boarding Start Hour( 7AM - 6PM):
+<td>Select Boarding Start Hour( 7AM - 6PM)</td>
+<td>
 <select name="hoas">
 <option value="7" name="hoas">7AM</option>
 <option value="8" name="hoas">8AM</option>
@@ -103,9 +109,14 @@ Select Boarding Start Hour( 7AM - 6PM):
 <option value="17" name="hoas">17PM</option>
 <option value="18" name="hoas">18PM</option>
 </select>
-</br>
+</td>
+</tr>
 
-Select Boarding End Hour( 7AM - 6PM):
+<tr>
+  <td>
+Select Boarding End Hour( 7AM - 6PM)
+ </td>
+ <td>
 <select name="hoae">
 <option value="7" name="hoae">7AM</option>
 <option value="8" name="hoae">8AM</option>
@@ -120,30 +131,45 @@ Select Boarding End Hour( 7AM - 6PM):
 <option value="17" name="hoae">17PM</option>
 <option value="18" name="hoae">18PM</option>
 </select>
-</br>
+</td>
+</tr>
 
-Boarding Type:
-  <select name="BoardingType">
+<tr>
+  <td>
+Boarding Type:</td>
+<!--  <select name="BoardingType">
     {% for item in boardingType %}
-      <option  value="{{ item.employeeid }}">{{ item.firstname }} {{item.lastname}}</option>
+      <option  value="{{ item.boardingType }}">{{ item.boardingType }}</option>
    {% endfor %}
-   </select>
-</br>
+   </select> --><td>
+   <select name="BoardingType">
+      <option  value="Basic" name="BoardingType">Basic</option>
+      <option  value="Premium" name="BoardingType">Premium</option>
+      <option  value="Deluxe" name="BoardingType">Deluxe</option>
+    </select>
+  </td>
 
-Employee/Staff Name:
+<tr><td>
+
+Employee/Staff Name</td>
+<td>
   <select name="Staff">
     {% for item in staff %}
       <option  value="{{ item.employeeid }}">{{ item.firstname }} {{item.lastname}}</option>
    {% endfor %}
    </select>
-</br>
+</td>
 
-<br>
+</tr>
 
-<input type="hidden" name="customerid" value="{{request.args.get('id') }}"></input>
+<tr><td>
+<input type="hidden" name="petid" value="{{request.args.get('id') }}"></input> 
   
      
- <input type="submit" value="AddPet" title="Add Boarding"></p>
+ <input type="submit" value="AddBoarding" title="Add Boarding"></p><a href="\">Back</a></td></tr>
+</tr>
+</table>
+
 </form>
  {% if error %}
          <p class="error"><strong>Error:</strong>{{error}}

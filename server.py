@@ -267,23 +267,23 @@ def appointments():
   
   return render_template("appt.html", **context)
 
-  @app.route('/boarding', methods=['GET', 'POST'])
-  def boarding():
+@app.route('/boarding', methods=['GET', 'POST'])
+def boarding():
    if request.method == 'GET':
      staff = []
-     cursor = g.conn.execute('select employeeid, firstname, lastname from employee where employeetype= boardingstaff')
+     cursor = g.conn.execute('select employeeid, firstname, lastname from employee where employeetype=%s', 'boardingstaff')
      for result in cursor:
         staff.append(result)  # can also be accessed using result[0]
      cursor.close()
      boardingtype = []
-     cursor = g.conn.execute('select employeeid, firstname, lastname from employee where employeetype= boardingstaff')
+     cursor = g.conn.execute('SELECT e.enumlabel as boardingType FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname =%s', 'boardingtype')
      for result in cursor:
-        boardingtype.append(result)  # can also be accessed using result[0]
+       boardingtype.append(result)  # can also be accessed using result[0]
      cursor.close()
      petid = request.args.get('id')
      boarding = []
      if(petid):
-      cursor = g.conn.execute('select firstname, lastname, starttime, endtime from boarding b inner join employee e on b.employeeid = e.employeeid where a.petid =%s', petid)
+      cursor = g.conn.execute('select firstname, lastname, starttime, endtime, boardingtype from petboarding b inner join employee e on b.employeeid = e.employeeid where b.petid =%s', petid)
       for result in cursor:
           boarding.append(result)
       cursor.close()
@@ -301,12 +301,14 @@ def appointments():
     startdt = datetime.datetime.combine(d, starthour)
     enddt = datetime.datetime.combine(d, endhour)
     petid = request.form['petid']
-    cursor = g.conn.execute('insert into boarding(petid, starttime, endtime, boardingtype, employeeid) values(%s, %s, %s, %s, %s)', petid, startdt, enddt, boardingtype, employeeid)
+    boarding = request.form['BoardingType']
+    #boardingtype = 'Premium'
+    cursor = g.conn.execute('insert into petboarding(petid, starttime, endtime, boardingtype, employeeid) values(%s, %s, %s, %s, %s)', petid, startdt, enddt, boardingtype, employeeid)
     r = '/boarding?id='
     r = r + petid
     return redirect(r)
   
-  return render_template("appt.html", **context)
+   return render_template("boarding.html", **context)
     
 
 

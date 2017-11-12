@@ -30,7 +30,7 @@
          <td>{{n.mob}}</td>
          <td>{{n.yob}}</td>
          <td><a href="{{ '/appointments?id='+n.petid|string }}">View/Add Appointment</a></td>
-         <td><a href="" >Add Boarding</a></td>
+         <td><a href="{{ '/boarding?id='+n.petid|string }}" >Add Boarding</a></td>
     </tr>
     {% endfor %}
    </table>
@@ -53,7 +53,7 @@
     DOB: <input type="text" name="dob" maxlength="2"><br>
     MOB: <input type="text" name="mob" maxlength="2"><br>
     YOB: <input type="text" name="yob" maxlength="4"><br>
-   <input type="hidden" name="customerid" value="{{request.args.get('id') }}"></input>
+   <input type="hidden" name="petid" value="{{request.args.get('id') }}"></input>
   <!--  <input type="hidden" name="customerid" value="3"></input>-->
      
  <input type="submit" value="AddPet" title="Add Pet"></p>
