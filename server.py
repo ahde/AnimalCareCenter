@@ -271,11 +271,40 @@ def pets():
     return redirect('/pets?id=',petcustomerid)
    # return redirect('/')
 
+@app.route('/drugs', methods=['GET', 'POST'])
+def drugs():
+  appointmentid = request.args.get('id')
+  if request.method == 'GET':
+     drugmaster = []
+     cursor = g.conn.execute('select drugcode, drugname from drugs')
+     for result in cursor:
+        drugmaster.append(result)  # can also be accessed using result[0]
+     cursor.close()
+    
+    
+     if(appointmentid):
+      cursor = g.conn.execute("select a.appointmentid, appointmentdate, drugcode, quantity, diagnosis from drugs_administered d inner join appointment a on a.appointmentid = d.appointmentid and d.appointmentid =%s",appointmentid)
+      drugs = []
+      for result in cursor:
+         drugs.append(result)  # can also be accessed using result[0]
+      cursor.close()
+     context = dict(data = drugs, drugmaster=drugmaster)
+     return render_template("drugs.html", **context)
+  else:
+    appointmentid = request.form['appointmentid']
+    drugcode = request.form['DrugName']
+    quantity = request.form['Quantity']
+    diagnosis = request.form['diagnosis']
+    g.conn.execute("INSERT INTO drugs_administered(appointmentid, drugcode, quantity, diagnosis) values(%s, %s, %s, %s)",(appointmentid, drugcode, quantity, diagnosis))
+    returl = "/drugs?id=" + appointmentid
+    return redirect(returl)
+   # return redirect('/')
+
 @app.route('/doctor', methods=['GET', 'POST'])
 def doctor():
   if request.method == 'GET':
       docid = request.args.get('id')
-      cursor = g.conn.execute("SELECT p.petid, petname, dob, mob, yob FROM appointment a inner join pet p on a.petid = p.petid and a.physicianid=%s", docid)
+      cursor = g.conn.execute("SELECT p.petid, petname, dob, mob, yob, a.appointmentid, a.appointmentdate FROM appointment a inner join pet p on a.petid = p.petid and a.physicianid=%s", docid)
       pets = []
       for result in cursor:
          pets.append(result)  # can also be accessed using result[0]

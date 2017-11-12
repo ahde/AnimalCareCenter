@@ -1,0 +1,68 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Patient Management</h1>
+    <h2> Drug Details</h2>
+  <div>
+    <table border="1">
+       <tr>
+        <td><b>AppointmentID</b></td>
+        <td><b>AppointmentDate</b></td>
+        <td><b>Drug Name</b></td>
+        <td><b>Quantity</b></td>
+        <td><b>Diagnosis</b></td>
+       </tr>
+      
+    {% for n in data %}
+     <tr>
+     	 <td>{{n.appointmentid}}</td>  
+         <td>{{n.appointmentdate}}</td>
+         <td>{{n.drugcode}}</td>
+         <td>{{n.quantity}}</td>
+         <td>{{n.diagnosis}}</td>
+      </tr>
+    {% endfor %}
+   </table>
+  </div>
+
+<a href="\">Back</a>
+<br>
+<br>
+<form method="POST" action="/drugs">
+  <table>
+  <tr><td>Diagnosis</td><td><input type="text" name="diagnosis"></td></tr>
+  <tr><td>
+  Drug Name</td>
+  <td>
+  <select name="DrugName">
+    {% for item in drugmaster %}
+      <option  value="{{ item.drugcode }}">{{ item.drugname }}</option>
+    {% endfor %}
+  </select>
+</td>
+<td>Quantity</td>
+<td> <select name="Quantity">
+   
+      <option name="Quantity"  value="1">1</option>
+ <option name="Quantity"  value="1">2</option>
+ <option name="Quantity"  value="1">3</option>
+ <option name="Quantity"  value="1">4</option>
+  </select></td>
+<td>
+     <input type="hidden" name="appointmentid" value="{{request.args.get('id') }}"></input>
+ <input type="submit" value="AddDrug" title="Add Drug"> </td>
+ </table>
+</form>
+ {% if error %}
+         <p class="error"><strong>Error:</strong>{{error}}
+      {% endif %}
+</body>
+
+</html>
