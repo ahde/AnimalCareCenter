@@ -1,0 +1,41 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Patient Management</h1>
+  
+  <div>
+    <table border="1">
+       <tr>
+        <td><b>Pet ID</b></td>
+        <td><b>Pet Name</b></td>
+        <td><b>Pet DOB</b></td>
+        <td><b>Pet MOB</b></td>
+        <td><b>Pet YOB</b></td>
+       </tr>
+      
+    {% for n in data %}
+     <tr>
+     	 <td>{{n.petid}}</td>  
+         <td>{{n.petname}}</td>
+         <td>{{n.dob}}</td>
+         <td>{{n.mob}}</td>
+         <td>{{n.yob}}</td>
+         <td><a href="{{ '/viewpetdetails?id='+n.petid|string }}">View Details</a></td>
+        </tr>
+    {% endfor %}
+   </table>
+  </div>
+
+<a href="\">Back</a>
+
+
+</body>
+
+</html>

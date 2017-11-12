@@ -206,6 +206,48 @@ def addCustomer():
     return redirect('/')
   return render_template('addCustomer.html')
 
+@app.route('/updateCustomer', methods=['GET','POST'])
+def updateCustomer():
+  error = None
+  if request.method == 'GET':
+    customerid = request.args.get('id')
+    customer = []
+    cursor = g.conn.execute("SELECT customerid,firstname, lastname, phone,email, street, city, state, country, zipcode FROM customer where customerid=%s", customerid)
+    for result in cursor:
+         customer.append(result)  # can also be accessed using result[0]
+    cursor.close()
+    context = dict(data = customer)
+    print(customer)
+    return render_template("updateCustomer.html", **context)
+  else:
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
+    phone = request.form['phone']
+    if(phone == ''):
+      error = " Please enter phone"
+      return render_template('updateCustomer.html', error=error)
+    if(phone != '' and not phone.isdigit()):
+      error = " Please enter a numeric phone"
+      return render_template('updateCustomer.html', error=error)
+    email = request.form['email']
+    street = request.form['street']
+    city = request.form['city']
+    state = request.form['state']
+    country = request.form['country']
+    zipcode = request.form['zipcode']
+    try:
+       g.conn.execute("update Customer set firstname =%s, lastname = %s, phone = %s, email = %s, stree=%s, city=%s, state=%s, country=%s, zipcode=%s" , firstname,lastname,phone,email,street,city,state, country,zipcode)
+    except Exception as e:
+       if("customer_phone_key" in e.orig.args[0]):
+          return render_template('updateCustomer.html', error="Phone number already taken")
+       else:
+        pass
+    finally:
+      pass
+   
+    return redirect('/')
+  
+
 @app.route('/pets', methods=['GET', 'POST'])
 def pets():
   if request.method == 'GET':
@@ -229,6 +271,18 @@ def pets():
     return redirect('/pets?id=',petcustomerid)
    # return redirect('/')
 
+@app.route('/doctor', methods=['GET', 'POST'])
+def doctor():
+  if request.method == 'GET':
+      docid = request.args.get('id')
+      cursor = g.conn.execute("SELECT p.petid, petname, dob, mob, yob FROM appointment a inner join pet p on a.petid = p.petid and a.physicianid=%s", docid)
+      pets = []
+      for result in cursor:
+         pets.append(result)  # can also be accessed using result[0]
+      cursor.close()
+      context = dict(data = pets)
+      return render_template("doctor.html", **context)
+ 
 @app.route('/appointments', methods=['GET', 'POST'])
 def appointments():
   if request.method == 'GET':
@@ -321,12 +375,24 @@ def boarding():
 def login():
   error = None
   if request.method == 'POST': 
-    if(request.form['username'] != 'admin' or request.form['password'] != 'password'):
-      error = 'Invalid Credentials'
+    username = request.form['username']
+    password = request.form['password']
+    employee = []
+    cursor = g.conn.execute('select employeeid, employeetype from employee where username=%s and password=%s',username, password)
+    for result in cursor:
+      employee.append(result)
+    cursor.close()
+    if(employee):
+      print(employee[0].employeetype)
+      if(employee[0].employeetype == 'physician'):
+         return redirect(url_for('doctor', id=employee[0].employeeid))
+      elif(employee[0].employeetype == 'admin'):
+          return redirect(url_for('index'))
     else:
-      return redirect(url_for('index'))
-  return render_template('login.html', error=error)
-
+      print("hello")
+      return render_template("login.html",error="Invalid credentials")
+  return render_template("login.html")
+   
 if __name__ == "__main__":
   import click
 
