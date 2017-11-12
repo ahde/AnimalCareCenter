@@ -1,12 +1,27 @@
 <html>
+ <head>
   <style>
     body{ 
       font-size: 15pt;
       font-family: arial;
     }
   </style>
+ <script type="text/javascript">
+   function validate()
+   {
 
+       var fromtime = parseInt(document.forms["boarding"]["hoas"].value);
+       var endtime = parseInt(document.forms["boarding"]["hoae"].value);
+       if(endtime < fromtime){
+         var w = window.open("","Please input a value","width=200, height=100, top=300, left=300");
+         w.document.write("End Time must be greater than start time" )
+         return  false;
+       }
+       return true;
+   }
 
+ </script>
+</head>
 <body>
   <h1>Welcome To Pet Boarding</h1>
   
@@ -32,7 +47,7 @@
 
 <br/><br/>
 
-<form method="POST" action="/boarding">
+<form method="POST" action="/boarding" name="boarding">
   <table>
      <tr>
   <td>Boarding Year</td><td>  <select name="yoa">
@@ -137,11 +152,7 @@ Select Boarding End Hour( 7AM - 6PM)
 <tr>
   <td>
 Boarding Type:</td>
-<!--  <select name="BoardingType">
-    {% for item in boardingType %}
-      <option  value="{{ item.boardingType }}">{{ item.boardingType }}</option>
-   {% endfor %}
-   </select> --><td>
+<td>
    <select name="BoardingType">
       <option  value="Basic" name="BoardingType">Basic</option>
       <option  value="Premium" name="BoardingType">Premium</option>
@@ -166,7 +177,8 @@ Employee/Staff Name</td>
 <input type="hidden" name="petid" value="{{request.args.get('id') }}"></input> 
   
      
- <input type="submit" value="AddBoarding" title="Add Boarding"></p><a href="\">Back</a></td></tr>
+
+ <input type="submit" value="AddBoarding" title="Add Boarding" onclick="return validate();"></p><a href="\">Back</a></td></tr>
 </tr>
 </table>
 
