@@ -21,6 +21,7 @@ from flask import Flask, request, render_template, g, redirect, Response, url_fo
 import datetime
 from sqlalchemy import exc
 import psycopg2
+from datetime import datetime
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -267,10 +268,13 @@ def pets():
     petmob = request.form['mob']
     petyob = request.form['yob']
     petcustomerid = request.form['customerid']
-    g.conn.execute("INSERT INTO Pet(customerid, petname, pettype, dob, mob, yob) VALUES(%s, %s, %s, %s,%s,%s)", (petcustomerid,petname,pettype,petdob,petmob,petyob))
+    try:
+      g.conn.execute("INSERT INTO Pet(customerid, petname, pettype, dob, mob, yob) VALUES(%s, %s, %s, %s,%s,%s)", (petcustomerid,petname,pettype,petdob,petmob,petyob))
+    except Exception as e:
+      print(e)
     returl = "/pets?id=" + petcustomerid
     return redirect(returl)
-   # return redirect('/')
+  
 
 @app.route('/drugs', methods=['GET', 'POST'])
 def drugs():
@@ -296,7 +300,10 @@ def drugs():
     drugcode = request.form['DrugName']
     quantity = request.form['Quantity']
     diagnosis = request.form['diagnosis']
-    g.conn.execute("INSERT INTO drugs_administered(appointmentid, drugcode, quantity, diagnosis) values(%s, %s, %s, %s)",(appointmentid, drugcode, quantity, diagnosis))
+    try:
+      g.conn.execute("INSERT INTO drugs_administered(appointmentid, drugcode, quantity, diagnosis) values(%s, %s, %s, %s)",(appointmentid, drugcode, quantity, diagnosis))
+    except Exception as e:
+      print(e)
     returl = "/drugs?id=" + appointmentid
     return redirect(returl)
    # return redirect('/')
@@ -329,7 +336,7 @@ def appointments():
      petid = request.args.get('id')
      appt = []
      if(petid):
-      cursor = g.conn.execute('select firstname, lastname, appointmentdate from appointment a inner join physician p on a.physicianid = p.physicianid inner join employee e on p.employeeid = e.employeeid  where a.petid =%s', petid)
+      cursor = g.conn.execute('select firstname, lastname, appointmentdate, appointmentid from appointment a inner join physician p on a.physicianid = p.physicianid inner join employee e on p.employeeid = e.employeeid  where a.petid =%s', petid)
       for result in cursor:
           appt.append(result)
       cursor.close()
@@ -345,12 +352,47 @@ def appointments():
     d = datetime.datetime(year=int(year), month=int(month), day=int(day))
     dt = datetime.datetime.combine(d, t)
     petid = request.form['petid']
-    cursor = g.conn.execute('insert into appointment(petid, physicianid, nurseid, appointmentdate) values(%s, %s, %s, %s)', petid, physicianid, nurseid, dt)
+    try:   
+      cursor = g.conn.execute('insert into appointment(petid, physicianid, nurseid, appointmentdate) values(%s, %s, %s, %s)', petid, physicianid, nurseid, dt)
+    except Exception as e:
+      print(e)
     r = '/appointments?id='
     r = r + petid
     return redirect(r)
   
   return render_template("appt.html", **context)
+
+@app.route('/billing', methods=['GET', 'POST'])
+def billing():
+  appointmentid = request.args.get('id')
+  if request.method == 'GET':
+     invoice = []
+     cursor = g.conn.execute('select a.appointmentid, a.appointmentdate, dategenerated, amount, p.petname from invoice i inner join appointment a on i.appointmentid = a.appointmentid inner join pet p on p.petid = a.petid where i.appointmentid  = %s', appointmentid)
+     for result in cursor:
+        invoice.append(result)  # can also be accessed using result[0]
+     context = {'data': invoice}
+  else:
+    amount = request.form['amount']
+    appointmentid = request.form['appointmentid']
+    print(appointmentid)
+    if(amount == ' '):
+      error = "Please enter the invoice amount"
+      return render_template(url_for("/billing", id=appointmentid), error = error)
+    if(amount != ' ' and not amount.isdigit()):
+      error = "Please enter a numeric invoice amount"
+      return render_template(url_for("billing.html", id=appointmentid), error = error)
+   
+    try:
+     cursor = g.conn.execute('insert into invoice (appointmentid, amount, dategenerated, servicetype) values(%s, %s, %s, %s)', appointmentid, amount, datetime.now(), 'HospitalService')
+    except Exception as e:
+     print(e.orig.args[0])
+     if("Appt_ID_UX" in e.orig.args[0]):
+        return redirect(url_for("billing", id=appointmentid, error = "Invoice already added"))
+    returl = '/billing?id='
+    returl = returl + appointmentid
+    return redirect(returl)
+  
+  return render_template("billing.html", **context)
 
 @app.route('/boarding', methods=['GET', 'POST'])
 def boarding():
@@ -419,7 +461,6 @@ def login():
       elif(employee[0].employeetype == 'admin'):
           return redirect(url_for('index'))
     else:
-      print("hello")
       return render_template("login.html",error="Invalid credentials")
   return render_template("login.html")
    

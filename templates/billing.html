@@ -1,0 +1,60 @@
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Invoice Information</h1>
+
+  <div>
+    <table border="1">
+       <tr>
+        <td><b>Pet Name</b></td>
+        <td><b>Appointment Date</b></td>
+        <td><b>Invoice Amount</b></td>
+        <td><b>Invoice Generated Date</b></td>
+       </tr>
+      
+    {% for n in data %}
+     <tr>
+        
+         <td>{{n.petname}}</td>
+         <td>{{n.appointmentdate}}</td>
+         <td>{{n.amount}}</td>
+         <td>{{n.dategenerated}}</td>
+             
+    </tr>
+    {% endfor %}
+   </table>
+  </div>
+
+
+ <h2>Add Billing</h2>
+  
+<form method="POST" action="/billing">
+<table>
+  <tr>
+    <td><input type="text" name="amount" maxlength="5"></td>
+    <input type="hidden" name="appointmentid" value="{{request.args.get('id') }}"></input>
+
+  </tr>
+
+</table>
+<br>
+<input type="hidden" name="appointmentid" value="{{request.args.get('id') }}"></input>
+<input type="submit" value="Add Invoice"></p>
+<a href="/">Back</a>
+
+</form>
+   <p class="error"><strong>Error:</strong>{{ request.args.get('error') }}
+
+
+</body>
+
+</html>
+

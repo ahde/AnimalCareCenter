@@ -16,6 +16,7 @@
        <tr>
         <td><b>Physician Name</b></td>
         <td><b>Appointment Date</b></td>
+        <td><b>Appointment ID</b></td>
        </tr>
       
     {% for n in data %}
@@ -23,6 +24,8 @@
         
          <td>{{n.firstname}} {{n.lastname}}</td>
          <td>{{n.appointmentdate}}</td>
+         <td>{{n.appointmentid}}</td>
+         <td><a href="/billing?id={{n.appointmentid|string }}">View/Add Billing</a></td>
              
     </tr>
     {% endfor %}
@@ -84,7 +87,11 @@ Select Appointment Day:
 <option value="31" name="doa">31</option>
 </select>
 <br>
-Appointment Year: <input type="text" name="yoa"> </br>
+ <td>Boarding Year</td><td>  <select name="yoa">
+    <option value="2017" name="yoa">2017</option>
+    <option value="2018" name="yoa">2018</option>
+    </select></td></tr>
+  <tr><td>
 
 Select Appointment Hour( 7AM - 6PM):
 <select name="hoa">
