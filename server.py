@@ -268,7 +268,8 @@ def pets():
     petyob = request.form['yob']
     petcustomerid = request.form['customerid']
     g.conn.execute("INSERT INTO Pet(customerid, petname, pettype, dob, mob, yob) VALUES(%s, %s, %s, %s,%s,%s)", (petcustomerid,petname,pettype,petdob,petmob,petyob))
-    return redirect('/pets?id=',petcustomerid)
+    returl = "/pets?id=" + petcustomerid
+    return redirect(returl)
    # return redirect('/')
 
 @app.route('/drugs', methods=['GET', 'POST'])

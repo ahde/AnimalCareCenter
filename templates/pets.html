@@ -50,10 +50,75 @@
     <option name="Bird" id="5" value="Bird">Bird</option>
     </select>
     </br>
-    DOB: <input type="text" name="dob" maxlength="2"><br>
-    MOB: <input type="text" name="mob" maxlength="2"><br>
-    YOB: <input type="text" name="yob" maxlength="4"><br>
-   <input type="hidden" name="petid" value="{{request.args.get('id') }}"></input>
+    DOB: <select name="dob">
+<option value="1" name="dob">1</option>
+<option value="2" name="doa">2</option>
+<option value="3" name="dob">3</option>
+<option value="4" name="dob">4</option>
+<option value="5" name="dob">5</option>
+<option value="6" name="dob">6</option>
+<option value="7" name="dob">7</option>
+<option value="8" name="dob">8</option>
+<option value="9" name="dob">9</option>
+<option value="10" name="dob">10</option>
+<option value="11" name="dob">11</option>
+<option value="12" name="dob">12</option>
+<option value="13" name="dob">13</option>
+<option value="14" name="dob">14</option>
+<option value="15" name="dob">15</option>
+<option value="16" name="dob">16</option>
+<option value="17" name="dob">17</option>
+<option value="18" name="dob">18</option>
+<option value="19" name="dob">19</option>
+<option value="20" name="dob">20</option>
+<option value="21" name="dob">21</option>
+<option value="22" name="dob">22</option>
+<option value="23" name="dob">23</option>
+<option value="24" name="dob">24</option>
+<option value="25" name="dob">25</option>
+<option value="26" name="dob">26</option>
+<option value="27" name="dob">27</option>
+<option value="28" name="dob">28</option>
+<option value="29" name="dob">29</option>
+<option value="30" name="dob">30</option>
+<option value="31" name="dob">31</option>
+</select>
+<br>
+    MOB:  <select name="mob">
+    <option value="1" name="mob">January</option>
+    <option value="2" name="mob">February</option>
+    <option value="3" name="mob">March</option>
+    <option value="4" name="mob">April</option>
+    <option value="5" name="mob">May</option>
+    <option value="6" name="mob">June</option>
+    <option value="7" name="mob">July</option>
+    <option value="8" name="mob">August</option>
+    <option value="9" name="mob">September</option>
+    <option value="10" name="mob">October</option>
+    <option value="11" name="mob">November</option>
+    <option value="12" name="mob">December</option>
+    </select><br>
+    YOB:  <select name="yob">
+    <option value="2000" name="yob">2000</option>
+    <option value="2001" name="yob">2001</option>
+    <option value="2002" name="yob">2002</option>
+    <option value="2003" name="yob">2003</option>
+    <option value="2004" name="yob">2004</option>
+    <option value="2005" name="yob">2005</option>
+    <option value="2006" name="yob">2006</option>
+    <option value="2007" name="yob">2007</option>
+    <option value="2008" name="yob">2008</option>
+    <option value="2009" name="yob">2009</option>
+    <option value="2010" name="yob">2010</option>
+    <option value="2011" name="yob">2011</option>
+    <option value="2012" name="yob">2012</option>
+    <option value="2013" name="yob">2013</option>
+    <option value="2014" name="yob">2014</option>
+    <option value="2015" name="yob">2015</option>
+    <option value="2016" name="yob">2016</option>
+    <option value="2017" name="yob">2017</option>
+    </select><br><br>
+   <input type="hidden" name="customerid" value="{{request.args.get('id') }}"></input>
   <!--  <input type="hidden" name="customerid" value="3"></input>-->
      
  <input type="submit" value="AddPet" title="Add Pet"></p>
