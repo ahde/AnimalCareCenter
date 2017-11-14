@@ -175,6 +175,22 @@ def index():
 def another():
   return render_template("another.html")
 
+@app.route('/SearchCustomer', methods=['GET','POST'])
+def SearchCustomer():
+  if(request.method == 'GET'):
+     print("hello")
+     return render_template('SearchCustomer.html')
+  else:
+    print('hello')
+    phone = request.form['phone']
+    cursor = g.conn.execute("SELECT customerid,firstname, lastname, phone,email, street, city, state, country, zipcode FROM customer where phone=%s", phone)
+    customer = []
+    for result in cursor:
+      customer.append(result)  # can also be accessed using result[0]
+    cursor.close()
+    context = dict(data = names)
+    return render_template('SearchCustomer.html', **context)
+
 
 # Example of adding new data to the database
 @app.route('/addCustomer', methods=['GET','POST'])
@@ -435,7 +451,10 @@ def boarding():
     try:
      cursor = g.conn.execute('insert into petboarding(petid, starttime, endtime, boardingtype, employeeid) values(%s, %s, %s, %s, %s)', petid, startdt, enddt, boardingtype, employeeid)
     except Exception as e:
-       return redirect(url_for('boarding', id=petid, error="Appointment already taken"))
+       if('time_check' in e.orig.args[0]):
+          return redirect(url_for('boarding', id=petid, error="End time should be greater than start time"))
+       elif('unique_boarding' in e.orig.args[0]):
+          return redirect(url_for('boarding', id=petid, error="Appointment already taken"))
     finally:
       pass
     r = '/boarding?id='
@@ -463,6 +482,8 @@ def login():
          return redirect(url_for('doctor', id=employee[0].employeeid))
       elif(employee[0].employeetype == 'admin'):
           return redirect(url_for('index'))
+      else:
+         return render_template("login.html",error="Access denied")
     else:
       return render_template("login.html",error="Invalid credentials")
   return render_template("login.html")

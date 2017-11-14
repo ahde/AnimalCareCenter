@@ -12,7 +12,7 @@
 
        var fromtime = parseInt(document.forms["boarding"]["hoas"].value);
        var endtime = parseInt(document.forms["boarding"]["hoae"].value);
-       if(endtime < fromtime){
+       if(endtime <= fromtime){
          var w = window.open("","Please input a value","width=200, height=100, top=300, left=300");
          w.document.write("End Time must be greater than start time" )
          return  false;
