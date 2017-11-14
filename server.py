@@ -385,11 +385,12 @@ def billing():
       return render_template(url_for("billing.html", id=appointmentid), error = error)
    
     try:
-     cursor = g.conn.execute('insert into invoice (appointmentid, amount, dategenerated, servicetype) values(%s, %s, %s, %s)', appointmentid, amount, datetime.now(), 'HospitalService')
+     cursor = g.conn.execute('insert into invoice (appointmentid, amount, dategenerated, servicetype) values(%s, %s, %s, %s)', appointmentid, amount, datetime.datetime.now(), 'HospitalService')
     except Exception as e:
-     print(e.orig.args[0])
-     if("Appt_ID_UX" in e.orig.args[0]):
-        return redirect(url_for("billing", id=appointmentid, error = "Invoice already added"))
+      print(e)
+    # print(e.orig.args[0])
+   #  if("Appt_ID_UX" in e.orig.args[0]):
+      return redirect(url_for("billing", id=appointmentid, error = "Invoice already added"))
     returl = '/billing?id='
     returl = returl + appointmentid
     return redirect(returl)
