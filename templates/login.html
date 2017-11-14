@@ -28,9 +28,20 @@
       <h1>Login</h2>
       <br>
       <form action="/login" method="post" name="Login">
-      <input type="text" name="username">
-      <input type="password" name="password">
-      <input type="submit" value="Login" onclick="return validate();">
+        <table>
+          <tr>
+            <td>UserName</td><td><input type="text" name="username"></td>
+          </tr>
+          <tr>
+            <td>Password</td><td> <input type="password" name="password"></td> 
+          </tr>
+          <tr>
+            <td> <input type="submit" value="Login" onclick="return validate();"></td>
+          </tr>
+        </table>
+      
+     
+     
       </form>
       {% if error %}
          <p class="error"><strong>Error:</strong>{{error}}
