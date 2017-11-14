@@ -21,7 +21,7 @@ from flask import Flask, request, render_template, g, redirect, Response, url_fo
 import datetime
 from sqlalchemy import exc
 import psycopg2
-from datetime import datetime
+
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -120,12 +120,14 @@ def index():
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT customerid,firstname, lastname, phone,email, street, city, state, country, zipcode FROM customer")
-  names = []
-  for result in cursor:
-    names.append(result)  # can also be accessed using result[0]
-  cursor.close()
-
+  if(request.method == 'GET'):
+    print('hello')
+    cursor = g.conn.execute("SELECT customerid,firstname, lastname, phone,email, street, city, state, country, zipcode FROM customer")
+    names = []
+    for result in cursor:
+       names.append(result)  # can also be accessed using result[0]
+    cursor.close()
+ 
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
   # pass data to a template and dynamically generate HTML based on the data
@@ -342,17 +344,17 @@ def appointments():
       cursor.close()
       context = {'physicians': physicians, 'nurses':nurses, 'data': appt}
   else:
-    physicianid = request.form['Physician']
-    nurseid = request.form['Nurse']
-    day = request.form['moa']
-    month = request.form['doa']
-    year = request.form['yoa']
-    hour = request.form['hoa']
-    t = datetime.time(int(hour),0,0)
-    d = datetime.datetime(year=int(year), month=int(month), day=int(day))
-    dt = datetime.datetime.combine(d, t)
-    petid = request.form['petid']
     try:   
+      physicianid = request.form['Physician']
+      nurseid = request.form['Nurse']
+      day = request.form['moa']
+      month = request.form['doa']
+      year = request.form['yoa']
+      hour = request.form['hoa']
+      t = datetime.time(int(hour),0,0)
+      d = datetime.datetime(year=int(year), month=int(month), day=int(day))
+      dt = datetime.datetime.combine(d, t)
+      petid = request.form['petid']
       cursor = g.conn.execute('insert into appointment(petid, physicianid, nurseid, appointmentdate) values(%s, %s, %s, %s)', petid, physicianid, nurseid, dt)
     except Exception as e:
       print(e)
